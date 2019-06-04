@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 public enum ResultCodeEnum {
 
-    SUCCESS(true, 20000,"成功"),
-    UNKNOWN_REASON(false, 20001, "未知错误");
+    SUCCESS(true, 0,"成功"),
+    UNKNOWN_REASON(false, -1, "未知错误");
 
     private Boolean success;
 

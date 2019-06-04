@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.guli.common.exception.GuliException;
 import org.guli.edu.entity.Teacher;
 import org.guli.edu.query.TeacherQuery;
 import org.guli.edu.service.TeacherService;
@@ -46,7 +47,11 @@ public class TeacherAdminController {
             @ApiParam(name = "size", value = "每页记录数", required = true)
             @PathVariable Integer size,
             @ApiParam(name = "teacherQuery", value = "讲师条件查询")
-            TeacherQuery teacherQuery) {
+                    TeacherQuery teacherQuery) {
+
+        if (current <= 0 || size <= 0) {
+            throw new GuliException("当前页码或每页记录数不能小于0！");
+        }
 
         Page<Teacher> page = new Page<>(current, size);
         return R.ok(teacherService.pageQuery(page, teacherQuery));
@@ -56,7 +61,7 @@ public class TeacherAdminController {
     @PostMapping
     public R save(
             @ApiParam(name = "teacher", value = "讲师对象", required = true)
-            @RequestBody Teacher teacher){
+            @RequestBody Teacher teacher) {
 
         return R.ok(teacherService.save(teacher));
     }
@@ -65,7 +70,7 @@ public class TeacherAdminController {
     @GetMapping("{id}")
     public R getById(
             @ApiParam(name = "id", value = "讲师ID", required = true)
-            @PathVariable String id){
+            @PathVariable String id) {
 
         return R.ok(teacherService.getById(id));
     }
@@ -76,7 +81,7 @@ public class TeacherAdminController {
             @ApiParam(name = "id", value = "讲师ID", required = true)
             @PathVariable String id,
             @ApiParam(name = "teacher", value = "讲师对象", required = true)
-            @RequestBody Teacher teacher){
+            @RequestBody Teacher teacher) {
 
         teacher.setId(id);
         return R.ok(teacherService.updateById(teacher));
