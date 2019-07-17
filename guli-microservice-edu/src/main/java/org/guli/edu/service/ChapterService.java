@@ -1,7 +1,10 @@
 package org.guli.edu.service;
 
-import org.guli.edu.entity.Chapter;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.guli.edu.entity.Chapter;
+import org.guli.edu.entity.vo.ChapterVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2019-06-04
  */
 public interface ChapterService extends IService<Chapter> {
+
+    List<ChapterVo> nestedList(String courseId);
+
+    boolean removeChapterById(String id);
+
+    void saveChapter(Chapter chapter);
 
 }

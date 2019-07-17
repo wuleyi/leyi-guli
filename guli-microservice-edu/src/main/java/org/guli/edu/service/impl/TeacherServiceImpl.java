@@ -3,14 +3,17 @@ package org.guli.edu.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.guli.common.constant.GuliGlobalConsts;
 import org.guli.edu.entity.Teacher;
 import org.guli.edu.mapper.TeacherMapper;
-import org.guli.edu.query.TeacherQuery;
+import org.guli.edu.entity.query.TeacherQuery;
 import org.guli.edu.service.TeacherService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,9 +51,11 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
 
             String end = teacherQuery.getEnd();
             if (!StringUtils.isEmpty(end)) {
-                queryWrapper.le("gmt_modified", end);
+                queryWrapper.le("gmt_create", end);
             }
         }
+
+        queryWrapper.orderByDesc("sort");
 
         baseMapper.selectPage(iPage, queryWrapper);
 
@@ -59,6 +64,23 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         pageMap.put("total", iPage.getTotal());
 
         return pageMap;
+    }
+
+    @Override
+    public Map<String, Object> nestedList() {
+
+        List<Teacher> seniorTeachers = new ArrayList<>(); // 高级讲师
+        List<Teacher> chiefTeachers = new ArrayList<>(); // 首席讲师
+
+        baseMapper.selectList(null).forEach(teacher -> {
+            if (GuliGlobalConsts.TEACHER_LEVEL.SENIOR.equals(teacher.getLevel())) seniorTeachers.add(teacher);
+            else chiefTeachers.add(teacher);
+        });
+
+        HashMap<String, Object> teacherMap = new HashMap<>();
+        teacherMap.put(GuliGlobalConsts.TEACHER_LEVEL_NAME.SENIOR, seniorTeachers);
+        teacherMap.put(GuliGlobalConsts.TEACHER_LEVEL_NAME.CHIEF, chiefTeachers);
+        return teacherMap;
     }
 
 }

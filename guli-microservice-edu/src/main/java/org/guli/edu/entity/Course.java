@@ -1,19 +1,15 @@
 package org.guli.edu.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -41,6 +37,9 @@ public class Course implements Serializable {
 
     @ApiModelProperty(value = "课程专业ID")
     private String subjectId;
+
+    @ApiModelProperty(value = "课程父级ID")
+    private String subjectParentId;
 
     @ApiModelProperty(value = "课程标题")
     private String title;

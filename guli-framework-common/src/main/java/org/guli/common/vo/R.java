@@ -3,8 +3,7 @@ package org.guli.common.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.guli.common.constans.ResultCodeEnum;
+import org.guli.common.constant.ResultCodeEnum;
 
 import java.util.HashMap;
 import java.util.Map;

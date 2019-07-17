@@ -1,4 +1,4 @@
-package org.guli.edu.query;
+package org.guli.edu.entity.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

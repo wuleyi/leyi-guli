@@ -3,7 +3,7 @@ package org.guli.edu.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.guli.edu.entity.Teacher;
-import org.guli.edu.query.TeacherQuery;
+import org.guli.edu.entity.query.TeacherQuery;
 
 import java.util.Map;
 
@@ -24,5 +24,11 @@ public interface TeacherService extends IService<Teacher> {
      * @param teacherQuery
      */
     Map<String, Object> pageQuery(IPage<Teacher> iPage, TeacherQuery teacherQuery);
+
+    /**
+     * 查询讲师信息，按级别分类
+     * @return
+     */
+    Map<String, Object> nestedList();
 
 }

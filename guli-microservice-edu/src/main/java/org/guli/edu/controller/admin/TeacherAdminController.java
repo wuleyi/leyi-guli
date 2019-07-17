@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.guli.common.exception.GuliException;
 import org.guli.edu.entity.Teacher;
-import org.guli.edu.query.TeacherQuery;
+import org.guli.edu.entity.query.TeacherQuery;
 import org.guli.edu.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by leyi on 2019/6/4.
  */
 @Api("讲师管理")
+@CrossOrigin
 @RestController
 @RequestMapping("/admin/edu/teacher")
 public class TeacherAdminController {
@@ -23,14 +24,15 @@ public class TeacherAdminController {
     @Autowired
     private TeacherService teacherService;
 
-    @ApiOperation(value = "获取讲师列表")
+    @ApiOperation("获取讲师列表，根据讲师等级分类")
     @GetMapping
     public R listTeachers() {
 
-        return R.ok(teacherService.list(null));
+        //return R.ok(teacherService.list(null)).setCode(20000).setMsg("Success");
+        return R.ok(teacherService.nestedList());
     }
 
-    @ApiOperation(value = "根据ID删除讲师（逻辑删除）")
+    @ApiOperation("根据ID删除讲师（逻辑删除）")
     @DeleteMapping("{id}")
     public R removeById(
             @ApiParam(name = "id", value = "讲师ID", required = true)
@@ -39,7 +41,7 @@ public class TeacherAdminController {
         return R.ok(teacherService.removeById(id));
     }
 
-    @ApiOperation(value = "分页讲师列表")
+    @ApiOperation("分页讲师列表")
     @GetMapping("{current}/{size}")
     public R pageList(
             @ApiParam(name = "current", value = "当前页码", required = true)
@@ -57,7 +59,7 @@ public class TeacherAdminController {
         return R.ok(teacherService.pageQuery(page, teacherQuery));
     }
 
-    @ApiOperation(value = "新增讲师")
+    @ApiOperation("新增讲师")
     @PostMapping
     public R save(
             @ApiParam(name = "teacher", value = "讲师对象", required = true)
@@ -66,7 +68,7 @@ public class TeacherAdminController {
         return R.ok(teacherService.save(teacher));
     }
 
-    @ApiOperation(value = "根据ID查询讲师")
+    @ApiOperation("根据ID查询讲师")
     @GetMapping("{id}")
     public R getById(
             @ApiParam(name = "id", value = "讲师ID", required = true)
@@ -75,7 +77,7 @@ public class TeacherAdminController {
         return R.ok(teacherService.getById(id));
     }
 
-    @ApiOperation(value = "根据ID修改讲师")
+    @ApiOperation("根据ID修改讲师")
     @PutMapping("{id}")
     public R updateById(
             @ApiParam(name = "id", value = "讲师ID", required = true)

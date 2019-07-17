@@ -1,4 +1,4 @@
-package org.guli.common.constans;
+package org.guli.common.constant;
 
 import lombok.Getter;
 

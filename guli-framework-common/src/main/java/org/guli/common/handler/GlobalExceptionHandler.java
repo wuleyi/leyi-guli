@@ -31,6 +31,13 @@ public class GlobalExceptionHandler {
         return R.failed("json解析异常！");
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public R error(IllegalArgumentException e){
+
+        log.error(ExceptionUtils.getMessage(e));
+        return R.failed(e.getMessage());
+    }
+
     @ExceptionHandler(BadSqlGrammarException.class)
     public R error(BadSqlGrammarException e) {
 
