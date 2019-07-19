@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import org.guli.common.constant.GuliGlobalConsts;
 import org.guli.common.constant.PriceConstants;
 import org.guli.common.util.Assert;
 import org.guli.common.util.GuliUtils;
 import org.guli.edu.entity.Course;
 import org.guli.edu.entity.CourseDescription;
+import org.guli.edu.entity.dto.CourseDetailsInfoDto;
+import org.guli.edu.entity.dto.CourseDetailsInfoVo;
 import org.guli.edu.entity.form.CourseInfoForm;
 import org.guli.edu.entity.query.CourseQuery;
 import org.guli.edu.mapper.CourseMapper;
@@ -22,6 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -106,6 +112,44 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     public boolean removeCourseById(String id) {
 
         return baseMapper.removeAllById(id) > 0;
+    }
+
+    @Override
+    public CourseDetailsInfoVo listCourseDetailsInfoById(String id) {
+
+        // 原始总数据
+        List<CourseDetailsInfoDto> originalDatas = baseMapper.selectCourseDetailsInfo(id);
+
+        // 前置校验，给定课程id没有查询到数据
+        Assert.notEmpty(originalDatas, "根据课程编号查询课程信息为空");
+
+        // 返回结果对象
+        CourseDetailsInfoVo courseDetailsInfoVo = GuliUtils.copyPropertiesPlus(originalDatas.get(0), new CourseDetailsInfoVo());
+
+        // 根据章节id分组后的map
+        Map<String, List<CourseDetailsInfoDto>> chapterMap = originalDatas.stream().collect(Collectors.groupingBy(CourseDetailsInfoDto::getChapterId));
+
+        // 用于存储章节信息，最终传递给返回结果对象
+        List<CourseDetailsInfoVo.ChapterDto> chapterDtos = Lists.newArrayList();
+
+        chapterMap.entrySet().forEach(chapterEntrySet -> {
+
+            // 根据章节id分组后map中的val，即章节列表
+            List<CourseDetailsInfoDto> chapterList = chapterEntrySet.getValue();
+
+            // 用于存储章节其下的课时信息，最终传递给章节对象
+            List<CourseDetailsInfoVo.ChapterDto.VideoDto> videoDtos = Lists.newArrayList();
+            chapterDtos.add(new CourseDetailsInfoVo().new ChapterDto(chapterEntrySet.getKey(), chapterList.get(0).getChapterTitle(), videoDtos));
+
+            // 根据视频id分组后的map
+            Map<String, List<CourseDetailsInfoDto>> videoMap = chapterList.stream().collect(Collectors.groupingBy(CourseDetailsInfoDto::getVideoId));
+
+            // 同上
+            videoMap.entrySet().forEach(videoEntrySet -> videoEntrySet.getValue().forEach(video -> videoDtos.add(GuliUtils.copyPropertiesPlus(video, new CourseDetailsInfoVo().new ChapterDto().new VideoDto()))));
+        });
+        // 将章节集合传递给返回结果对象
+        courseDetailsInfoVo.setChapterDtoList(chapterDtos);
+        return courseDetailsInfoVo;
     }
 
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.guli.edu.entity.Course;
+import org.guli.edu.entity.dto.CourseDetailsInfoVo;
 import org.guli.edu.entity.form.CourseInfoForm;
 import org.guli.edu.entity.query.CourseQuery;
 
@@ -26,5 +27,7 @@ public interface CourseService extends IService<Course> {
     IPage<Course> pageQuery(Page<Course> pageParam, CourseQuery courseQuery);
 
     boolean removeCourseById(String id);
+
+    CourseDetailsInfoVo listCourseDetailsInfoById(String id);
 
 }

@@ -17,7 +17,7 @@ public class GuliUtils {
     }
 
     /**
-     * bean to map.
+     * bean dto map.
      *
      * @param bean
      * @param <T>
@@ -36,7 +36,7 @@ public class GuliUtils {
     }
 
     /**
-     * map to bean.
+     * map dto bean.
      *
      * @param map
      * @param bean
@@ -50,7 +50,7 @@ public class GuliUtils {
     }
 
     /**
-     * List<T> to List<Map<String, Object>>
+     * List<T> dto List<Map<String, Object>>
      *
      * @param objList
      * @param <T>

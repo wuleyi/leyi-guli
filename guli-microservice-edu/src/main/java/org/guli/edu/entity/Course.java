@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("edu_course")
-@ApiModel(value="Course对象", description="课程")
+@ApiModel(value = "Course对象", description = "课程")
 public class Course implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -74,5 +74,13 @@ public class Course implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
 
+
+    public Course() {
+    }
+
+    public Course(String id, String status) {
+        this.id = id;
+        this.status = status;
+    }
 
 }

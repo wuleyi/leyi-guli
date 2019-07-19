@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.guli.common.constant.GuliGlobalConsts;
 import org.guli.edu.entity.Course;
 import org.guli.edu.entity.form.CourseInfoForm;
 import org.guli.edu.entity.query.CourseQuery;
@@ -46,8 +47,7 @@ public class CourseAdminController {
             @ApiParam(name = "id", value = "课程ID", required = true)
             @PathVariable String id) {
 
-        CourseInfoForm courseInfoForm = service.getCourseInfoFormById(id);
-        return R.ok(courseInfoForm);
+        return R.ok(service.getCourseInfoFormById(id));
     }
 
     @ApiOperation("更新课程")
@@ -60,7 +60,7 @@ public class CourseAdminController {
             @PathVariable String id) {
 
         service.updateCourseInfoById(id, courseInfoForm);
-        return R.ok(null);
+        return R.ok("更新课程成功");
     }
 
     @ApiOperation(value = "分页课程列表")
@@ -89,8 +89,23 @@ public class CourseAdminController {
             @ApiParam(name = "id", value = "课程ID", required = true)
             @PathVariable String id) {
 
-        boolean result = service.removeCourseById(id);
-        return R.ok(result);
+        return R.ok(service.removeCourseById(id));
+    }
+
+    @GetMapping("course-details-info/{id}")
+    public R getCourseDetailsInfoById(
+            @ApiParam(name = "id", value = "课程ID", required = true)
+            @PathVariable String id) {
+
+        return R.ok(service.listCourseDetailsInfoById(id));
+    }
+
+    @PutMapping("publish/{id}")
+    public R publishCourse(
+            @ApiParam(name = "id", value = "课程ID", required = true)
+            @PathVariable String id) {
+
+        return R.ok(service.updateById(new Course(id, GuliGlobalConsts.COURSE_STATUS.NORMAL)));
     }
 
 }
